@@ -11,7 +11,7 @@ public class Deck extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_deck);
 	}
-	//TEST
+	//TEST whats uup motha fucka
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
