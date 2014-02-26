@@ -14,7 +14,7 @@ public class Deck extends Activity {
 		
 		Log.d("For Fun", "Testing Git");
 	}
-	//TEST whats uup motha fucka
+	//TEST
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
