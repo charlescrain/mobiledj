@@ -57,7 +57,10 @@
                 android:id="@+id/Effects_onoff"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Effects" />
+                android:text="Effects ON/OFF"
+                android:textOff="Effects ON/OFF"
+                android:textOn="Effects ON/OFF" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -75,13 +78,17 @@
                 android:id="@+id/Loops_onoff1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Loop" />
+                android:text="Loop"
+                android:textOff="Loop"
+                android:textOn="Loop" />
 
             <ToggleButton
                 android:id="@+id/Effects_onoff1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Effects" />
+                android:text="Effects"
+                android:textOff="Effects"
+                android:textOn="Effects" />
 
             <Button
                 android:id="@+id/Record_button1"
@@ -105,13 +112,17 @@
                 android:id="@+id/Loops_onoff2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Loop" />
+                android:text="Loop"
+                android:textOff="Loop"
+                android:textOn="Loop" />
 
             <ToggleButton
                 android:id="@+id/Effects_onoff2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Effects" />
+                android:text="Effects"
+                android:textOff="Effects"
+                android:textOn="Effects" />
 
             <Button
                 android:id="@+id/Record_button2"
@@ -135,13 +146,17 @@
                 android:id="@+id/Loops_onoff3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Loop" />
+                android:text="Loop"
+                android:textOff="Loop"
+                android:textOn="Loop" />
 
             <ToggleButton
                 android:id="@+id/Effects_onoff3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Effects" />
+                android:text="Effects"
+                android:textOff="Effects"
+                android:textOn="Effects" />
 
             <Button
                 android:id="@+id/Record_button3"
@@ -165,13 +180,17 @@
                 android:id="@+id/Loops_onoff4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Loop" />
+                android:text="Loop"
+                android:textOff="Loop"
+                android:textOn="Loop" />
 
             <ToggleButton
                 android:id="@+id/Effects_onoff4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Effects" />
+                android:text="Effects"
+                android:textOff="Effects"
+                android:textOn="Effects" />
 
             <Button
                 android:id="@+id/Record_button4"
