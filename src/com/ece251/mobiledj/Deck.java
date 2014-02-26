@@ -2,6 +2,7 @@ package com.ece251.mobiledj;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.util.Log;
 import android.view.Menu;
 
 public class Deck extends Activity {
@@ -10,6 +11,8 @@ public class Deck extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_deck);
+		
+		Log.d("For Fun", "Testing Git");
 	}
 	//TEST whats uup motha fucka
 
