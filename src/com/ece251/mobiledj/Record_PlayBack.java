@@ -16,8 +16,10 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
 import android.media.AudioTrack;
+import android.media.AudioTrack.OnPlaybackPositionUpdateListener;
 import android.media.MediaRecorder;
 import android.os.Environment;
+import android.util.Log;
 
 public class Record_PlayBack {
 	
@@ -25,7 +27,7 @@ public class Record_PlayBack {
 	private File file;
 	
 	
-	public boolean recording;
+	public boolean recording,hold;
 	
 	public Record_PlayBack(String name){
 		filename = name;
@@ -76,6 +78,7 @@ public class Record_PlayBack {
 	}
 	
 	public void play(){
+		  int x;
           int shortSizeInBytes = Short.SIZE/Byte.SIZE;
 
           int bufferSizeInBytes = (int)(file.length()/shortSizeInBytes);
@@ -102,10 +105,22 @@ public class Record_PlayBack {
                             AudioFormat.ENCODING_PCM_16BIT,
                             bufferSizeInBytes,
                             AudioTrack.MODE_STREAM);
+                audioTrack.setNotificationMarkerPosition(bufferSizeInBytes);
+                audioTrack.setPlaybackPositionUpdateListener(new OnPlaybackPositionUpdateListener() {
+                    @Override
+                    public void onPeriodicNotification(AudioTrack track) {
+                        // nothing to do
+                    }
+                    @Override
+                    public void onMarkerReached(AudioTrack track) {
+                        Log.d("Record_PlayBack", "Audio track end of file reached...");
+                        hold = false;
+                    }
+                }); 
                 audioTrack.setStereoVolume(AudioTrack.getMaxVolume(), AudioTrack.getMaxVolume());
                 audioTrack.play();
                 audioTrack.write(audioData, 0, bufferSizeInBytes);
-
+                
 
           } catch (FileNotFoundException e)
           {
