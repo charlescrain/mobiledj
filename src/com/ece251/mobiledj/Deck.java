@@ -44,6 +44,7 @@ public class Deck extends Activity {
 	}
 
 	//TEST TESTEST
+	//test3
 	
 	private void initialize_record(){
 		rec1 = new Record_PlayBack("recording1.pcm");
