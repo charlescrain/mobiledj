@@ -199,37 +199,31 @@ public class Deck extends Activity {
 		
 		*/
 		
-		play1.setOnClickListener(new OnClickListener() {
+		play1.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
-			public void onClick(View v) {
+			public boolean onTouch(View v, MotionEvent event) {
 				// TODO Auto-generated method stub
-				if(!loop1)
+				int action = event.getAction();
+				if(action == MotionEvent.ACTION_DOWN)
 					rec1.play();
-				else{
-					while(loop1){
-						new Thread(new Runnable() {
-					        public void run() {
-					        	rec1.play();
-					        }
-					    }).start();
-
-						rec1.hold = true;
-						while(rec1.hold){
-							;
-						}
-					}
-				}
+					
+				return false;
 			}
 		});
-		play2.setOnClickListener(new OnClickListener() {
+	
+		play2.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
-			public void onClick(View v) {
+			public boolean onTouch(View v, MotionEvent event) {
 				// TODO Auto-generated method stub
-				rec2.play();
+				int action = event.getAction();
+				if(action == MotionEvent.ACTION_DOWN)
+					rec2.play();
+				return false;
 			}
 		});
+			
 		play3.setOnClickListener(new OnClickListener() {
 			
 			@Override

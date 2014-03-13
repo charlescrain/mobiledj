@@ -106,8 +106,8 @@ public class Record_PlayBack {
                             AudioFormat.ENCODING_PCM_16BIT,
                             bufferSizeInBytes,
                             AudioTrack.MODE_STREAM);
-                audioTrack.setNotificationMarkerPosition(bufferSizeInBytes);
-                audioTrack.setPlaybackPositionUpdateListener(new OnPlaybackPositionUpdateListener() {
+             //   audioTrack.setNotificationMarkerPosition(bufferSizeInBytes);
+             /*   audioTrack.setPlaybackPositionUpdateListener(new OnPlaybackPositionUpdateListener() {
                     @Override
                     public void onPeriodicNotification(AudioTrack track) {
                         // nothing to do
@@ -117,8 +117,9 @@ public class Record_PlayBack {
                         Log.d("Record_PlayBack", "Audio track end of file reached...");
                         hold = false;
                     }
-                }); 
+                });  */
                 audioTrack.setStereoVolume(AudioTrack.getMaxVolume(), AudioTrack.getMaxVolume());
+               // audioTrack.setLoopPoints(0, bufferSizeInBytes, 3);
                 audioTrack.play();
                 audioTrack.write(audioData, 0, bufferSizeInBytes);
                 
