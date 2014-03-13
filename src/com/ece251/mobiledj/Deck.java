@@ -85,7 +85,7 @@ public class Deck extends Activity {
 
                 recordThread1.start();
 				}
-				else{
+				if(action == MotionEvent.ACTION_UP) {
 					rec1.recording = false;
 				}
 				return false;
@@ -109,7 +109,8 @@ public class Deck extends Activity {
                 	});
 
                 	recordThread2.start();
-				} else {
+				}
+				if(action == MotionEvent.ACTION_UP) {
 					rec2.recording =false;
 				}
 				return false;
@@ -133,7 +134,8 @@ public class Deck extends Activity {
 					});
 
 					recordThread3.start();
-				} else {
+				}
+				if(action == MotionEvent.ACTION_UP) {
 					rec3.recording =false;
 				}
 				return false;
@@ -158,7 +160,8 @@ public class Deck extends Activity {
 					});
 
 					recordThread4.start();
-				}else {
+				}
+				if(action == MotionEvent.ACTION_UP) {
 					rec4.recording =false;
 				}
 				return false;

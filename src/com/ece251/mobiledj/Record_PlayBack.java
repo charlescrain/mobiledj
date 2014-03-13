@@ -31,13 +31,13 @@ public class Record_PlayBack {
 	
 	public Record_PlayBack(String name){
 		filename = name;
-        file = new File(Environment.getExternalStorageDirectory(), name);  //make a new file
 		
 	}
 	
 	public void record(){
+ 	  file = new File(Environment.getExternalStorageDirectory(), filename);  //make a new file
 		try
-        {
+        {		
               file.createNewFile();  //do a try to make sure making new file works
               
               //Set newly made file to a DataOutputStream
@@ -78,6 +78,7 @@ public class Record_PlayBack {
 	}
 	
 	public void play(){
+		  file = new File(Environment.getExternalStorageDirectory(), filename);  //make a new file
 		  int x;
           int shortSizeInBytes = Short.SIZE/Byte.SIZE;
 
