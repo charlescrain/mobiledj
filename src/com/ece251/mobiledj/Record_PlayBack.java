@@ -27,7 +27,7 @@ public class Record_PlayBack {
 	private File file;
 	
 	
-	public boolean recording,hold;
+	public boolean recording,playon;
 	
 	public Record_PlayBack(String name){
 		filename = name;
@@ -48,7 +48,6 @@ public class Record_PlayBack {
               int minBufferSize = AudioRecord.getMinBufferSize(11025,
                           AudioFormat.CHANNEL_CONFIGURATION_MONO,
                           AudioFormat.ENCODING_PCM_16BIT);
-
               short[] audioData = new short[minBufferSize];
 
               AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
@@ -79,25 +78,17 @@ public class Record_PlayBack {
 	
 	public void play(){
 		  file = new File(Environment.getExternalStorageDirectory(), filename);  //make a new file
-		  int x;
+		  playon = true;
           int shortSizeInBytes = Short.SIZE/Byte.SIZE;
 
           int bufferSizeInBytes = (int)(file.length()/shortSizeInBytes);
-          short[] audioData = new short[bufferSizeInBytes];
+          Log.d("tahdaerhtaetaestah", "test"+bufferSizeInBytes);
+          short[] audioData = new short[1];
 
           try {
                 InputStream inputStream = new FileInputStream(file);
                 BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
                 DataInputStream dataInputStream = new DataInputStream(bufferedInputStream);
-
-                int i = 0;
-                while(dataInputStream.available() > 0)
-                {
-                      audioData[i] = dataInputStream.readShort();
-                      i++;
-                }
-
-                dataInputStream.close();
 
                 AudioTrack audioTrack = new AudioTrack(
                             AudioManager.STREAM_MUSIC,
@@ -121,7 +112,76 @@ public class Record_PlayBack {
                 audioTrack.setStereoVolume(AudioTrack.getMaxVolume(), AudioTrack.getMaxVolume());
                // audioTrack.setLoopPoints(0, bufferSizeInBytes, 3);
                 audioTrack.play();
-                audioTrack.write(audioData, 0, bufferSizeInBytes);
+                while(dataInputStream.available() > 0 && playon)
+                {
+                      audioData[0] = dataInputStream.readShort();
+                      if(filename == "recording1.pcm"){
+                    	  Deck.audioOne[Deck.Time] = audioData[0];
+                      }
+                      if(filename == "recording2.pcm"){
+                    	  Deck.audioTwo[Deck.Time] = audioData[0];
+                      }
+                      
+                      switch(Deck.playing){
+                      case 1:if(filename == "recording1.pcm"){
+                    	  Deck.audioTwo[Deck.Time] = 0;
+                    	  Deck.audioThree[Deck.Time] = 0;
+                    	  Deck.audioFour[Deck.Time] = 0;
+                    	  Deck.Time++;
+                      }break;
+                      case 2:if(filename == "recording2.pcm"){
+                    	  Deck.audioOne[Deck.Time] = 0;
+                    	  Deck.audioThree[Deck.Time] = 0;
+                    	  Deck.audioFour[Deck.Time] = 0;
+                    	  Deck.Time++;
+                      }break;
+                      case 3:if(filename == "recording3.pcm"){
+                    	  Deck.audioTwo[Deck.Time] = 0;
+                    	  Deck.audioOne[Deck.Time] = 0;
+                    	  Deck.audioFour[Deck.Time] = 0;
+                    	  Deck.Time++;
+                      }break;
+                      case 4:if(filename == "recording4.pcm"){
+                    	  Deck.audioTwo[Deck.Time] = 0;
+                    	  Deck.audioThree[Deck.Time] = 0;
+                    	  Deck.audioOne[Deck.Time] = 0;
+                    	  Deck.Time++;
+                      }break;
+                      case 5:if(filename == "recording1.pcm"){
+                    	  Deck.audioThree[Deck.Time] = 0;
+                    	  Deck.audioFour[Deck.Time] = 0;
+                    	  Deck.Time++;
+                      }break;
+                      case 6:if(filename == "recording1.pcm"){
+                    	  Deck.audioTwo[Deck.Time] = 0;
+                    	  Deck.audioFour[Deck.Time] = 0;
+                    	  Deck.Time++;
+                      }break;
+                      case 7:if(filename == "recording1.pcm"){
+                    	  Deck.audioTwo[Deck.Time] = 0;
+                    	  Deck.audioThree[Deck.Time] = 0;
+                    	  Deck.Time++;
+                      }break;
+                      case 8:if(filename == "recording2.pcm"){
+                    	  Deck.audioOne[Deck.Time] = 0;
+                    	  Deck.audioFour[Deck.Time] = 0;
+                    	  Deck.Time++;
+                      }break;
+                      case 9:if(filename == "recording2.pcm"){
+                    	  Deck.audioOne[Deck.Time] = 0;
+                    	  Deck.audioThree[Deck.Time] = 0;
+                    	  Deck.Time++;
+                      }break;
+                      case 10:if(filename == "recording3.pcm"){
+                    	  Deck.audioTwo[Deck.Time] = 0;
+                    	  Deck.audioOne[Deck.Time] = 0;
+                    	  Deck.Time++;
+                      }break;
+                      }
+                      audioTrack.write(audioData, 0, 1);
+                }
+                dataInputStream.close();
+                
                 
 
           } catch (FileNotFoundException e)

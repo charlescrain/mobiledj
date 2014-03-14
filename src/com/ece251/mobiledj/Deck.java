@@ -15,6 +15,12 @@ public class Deck extends Activity {
 	Record_PlayBack rec1, rec2, rec3, rec4;
 	Button record1, record2, record3, record4; //Record Buttons
 	Button play1,play2,play3,play4;
+	static short[] audioOne = new short[600000];
+	static short[] audioTwo = new short[600000];
+	static short[] audioThree = new short[600000];
+	static short[] audioFour = new short[600000];
+	static volatile int Time = 0;
+	static int playing = 0;
 	
 	boolean loop1;
 	
@@ -205,9 +211,20 @@ public class Deck extends Activity {
 			public boolean onTouch(View v, MotionEvent event) {
 				// TODO Auto-generated method stub
 				int action = event.getAction();
-				if(action == MotionEvent.ACTION_DOWN)
+				if(action == MotionEvent.ACTION_DOWN){
+					switch(playing){
+					case 0:playing = 1;break;
+					case 2:playing = 3;break;
+					}
 					rec1.play();
-					
+				}
+				if(action == MotionEvent.ACTION_UP) {
+					switch(playing){
+					case 1:playing = 0;break;
+					case 3:playing = 2;break;
+					}
+					rec1.playon = true;
+				}
 				return false;
 			}
 		});
@@ -218,8 +235,20 @@ public class Deck extends Activity {
 			public boolean onTouch(View v, MotionEvent event) {
 				// TODO Auto-generated method stub
 				int action = event.getAction();
-				if(action == MotionEvent.ACTION_DOWN)
+				if(action == MotionEvent.ACTION_DOWN){
+					switch(playing){
+					case 0:playing = 2;break;
+					case 1:playing = 3;break;
+					}
 					rec2.play();
+				}
+				if(action == MotionEvent.ACTION_UP) {
+					switch(playing){
+					case 2:playing = 0;break;
+					case 3:playing = 1;break;
+					}
+					rec2.playon = true;
+				}
 				return false;
 			}
 		});
@@ -229,6 +258,18 @@ public class Deck extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+//				switch(playing){
+//				case 1:playing = ;break;
+//				case 2:playing = ;break;
+//				case 3:playing = ;break;
+//				case 4:playing = ;break;
+//				case 5:playing = ;break;
+//				case 6:playing = ;break;
+//				case 7:playing = ;break;
+//				case 8:playing = ;break;
+//				case 9:playing = ;break;
+//				case 10:playing = ;break;
+//				}
 				rec3.play();
 			}
 		});
@@ -237,6 +278,18 @@ public class Deck extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+//				switch(playing){
+//				case 1:playing = ;break;
+//				case 2:playing = ;break;
+//				case 3:playing = ;break;
+//				case 4:playing = ;break;
+//				case 5:playing = ;break;
+//				case 6:playing = ;break;
+//				case 7:playing = ;break;
+//				case 8:playing = ;break;
+//				case 9:playing = ;break;
+//				case 10:playing = ;break;
+//				}
 				rec4.play();
 			}
 		});
