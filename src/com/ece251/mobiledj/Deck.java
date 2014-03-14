@@ -22,11 +22,12 @@ import android.widget.ToggleButton;
 public class Deck extends Activity {
 	Record_PlayBack rec1, rec2, rec3, rec4;
 	Button record1, record2, record3, record4; //Record Buttons
-	Button play1,play2,play3,play4,Mix;
+	Button play1,play2,play3,play4,Mix,Save;
 	static short[] audioOne = new short[600000];
 	static short[] audioTwo = new short[600000];
 	static short[] audioThree = new short[600000];
 	static short[] audioFour = new short[600000];
+	static short[] audioMix = new short[600000];
 	static volatile int Time = 0;
 	static int playing = 0;
 	
@@ -78,6 +79,7 @@ public class Deck extends Activity {
 		play4 = (Button) findViewById(R.id.Play_button4);
 		
 		Mix = (Button) findViewById(R.id.Mix_button);
+		Save = (Button) findViewById(R.id.Save_button);
 		
 		record1.setOnTouchListener(new OnTouchListener() {
 			
@@ -227,8 +229,8 @@ public class Deck extends Activity {
 					public void run() {
 						// TODO Auto-generated method stub
 						if(action == MotionEvent.ACTION_DOWN){
-							//int shortSizeInBytes = Short.SIZE/Byte.SIZE;
-							//int bufferSizeInBytes = (int)(audioOne.length()/shortSizeInBytes);
+							int shortSizeInBytes = Short.SIZE/Byte.SIZE;
+							int bufferSizeInBytes = (int)(audioMix.length/shortSizeInBytes);
 					          //Log.d("tahdaerhtaetaestah", "test"+bufferSizeInBytes);
 					          //short[] audioData = new short[1];
 
@@ -236,25 +238,64 @@ public class Deck extends Activity {
 					               // BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
 					               // DataInputStream dataInputStream = new DataInputStream(bufferedInputStream);
 
-					                AudioTrack audioMix = new AudioTrack(
+					                AudioTrack audioMixed = new AudioTrack(
 					                            AudioManager.STREAM_MUSIC,
 					                            11025,
 					                            AudioFormat.CHANNEL_CONFIGURATION_MONO,
 					                            AudioFormat.ENCODING_PCM_16BIT,
-					                            Time,
+					                            bufferSizeInBytes,
 					                            AudioTrack.MODE_STREAM);
-							audioMix.play();
-					        audioMix.write(audioOne, 0, Time);
+							audioMixed.play();
+					        audioMixed.write(audioMix, 0, bufferSizeInBytes);
 							
 						}
 						if(action == MotionEvent.ACTION_UP) {
-							switch(playing){
-							case 1:playing = 0;break;
-							case 3:playing = 2;break;
-							}
 							
-							rec1.playon = false;
-							Log.d("Motion Up", ""+rec1.playon);
+						}
+					}
+				});
+				play1.start();
+				}
+				
+				return false;
+			}
+		});
+		
+		Save.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				// TODO Auto-generated method stub
+				
+				final int action = event.getAction();
+				if(action != MotionEvent.ACTION_MOVE){
+				Thread play1 = new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						if(action == MotionEvent.ACTION_DOWN){
+							int i;
+							for(i = 0; i<Time; i++){
+								//audioMix[i] = (short)((audioOne[i]/2) + (audioTwo[i]/2));
+								float samplef1 = audioOne[i] / 32768.0f; 
+						        float samplef2 = audioTwo[i] / 32768.0f;
+						        float mixed    = samplef1 + samplef2;
+
+						        // reduce the volume a bit:
+						        //mixed *= 0.8;
+						        // hard clipping
+						        if (mixed > 1.0f)  mixed = 1.0f;
+						        if (mixed < -1.0f) mixed = -1.0f;
+
+						        short outputSample = (short) (mixed * 32768.0f);
+						        audioMix[i]         = outputSample;   
+						        Log.d("test",""+audioMix[i]);
+							}
+							Log.d("done","DONE");
+						}
+						if(action == MotionEvent.ACTION_UP) {
+							
 						}
 					}
 				});
@@ -283,14 +324,14 @@ public class Deck extends Activity {
 						if(action == MotionEvent.ACTION_DOWN){
 							switch(playing){
 							case 0:playing = 1;break;
-							case 2:playing = 3;break;
+							case 2:playing = 5;break;
 							}
 							rec1.play();
 						}
 						if(action == MotionEvent.ACTION_UP) {
 							switch(playing){
 							case 1:playing = 0;break;
-							case 3:playing = 2;break;
+							case 5:playing = 2;break;
 							}
 							
 							rec1.playon = false;
@@ -320,14 +361,14 @@ public class Deck extends Activity {
 						if(action == MotionEvent.ACTION_DOWN){
 							switch(playing){
 							case 0:playing = 2;break;
-							case 1:playing = 3;break;
+							case 1:playing = 5;break;
 							}
 							rec2.play();
 						}
 						if(action == MotionEvent.ACTION_UP) {
 							switch(playing){
 							case 2:playing = 0;break;
-							case 3:playing = 1;break;
+							case 5:playing = 1;break;
 							}
 							rec2.playon = false;
 						}
