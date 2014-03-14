@@ -27,7 +27,7 @@ public class Record_PlayBack {
 	private File file;
 	
 	
-	public boolean recording,playon;
+	public volatile boolean recording,playon;
 	
 	public Record_PlayBack(String name){
 		filename = name;
@@ -112,7 +112,7 @@ public class Record_PlayBack {
                 audioTrack.setStereoVolume(AudioTrack.getMaxVolume(), AudioTrack.getMaxVolume());
                // audioTrack.setLoopPoints(0, bufferSizeInBytes, 3);
                 audioTrack.play();
-                while(dataInputStream.available() > 0 && playon)
+                while((dataInputStream.available() > 0) && playon)
                 {
                       audioData[0] = dataInputStream.readShort();
                       if(filename == "recording1.pcm"){

@@ -22,7 +22,7 @@ public class Deck extends Activity {
 	static volatile int Time = 0;
 	static int playing = 0;
 	
-	boolean loop1;
+	static  boolean playon1,playon2;
 	
 
 	@Override
@@ -30,11 +30,9 @@ public class Deck extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_deck);
 		
-		Log.d("For Fun", "Testing Git");
 		
 		initialize_record();
 		init_Button();
-		loop1 =true;
 		
 		
 		
@@ -210,21 +208,37 @@ public class Deck extends Activity {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				// TODO Auto-generated method stub
-				int action = event.getAction();
-				if(action == MotionEvent.ACTION_DOWN){
-					switch(playing){
-					case 0:playing = 1;break;
-					case 2:playing = 3;break;
+				
+				final int action = event.getAction();
+				Log.d("ACtion", "Action is:" + action);
+				if(action != MotionEvent.ACTION_MOVE){
+				Thread play1 = new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+							Log.d("PLay", "Calling PLay");
+						if(action == MotionEvent.ACTION_DOWN){
+							switch(playing){
+							case 0:playing = 1;break;
+							case 2:playing = 3;break;
+							}
+							rec1.play();
+						}
+						if(action == MotionEvent.ACTION_UP) {
+							switch(playing){
+							case 1:playing = 0;break;
+							case 3:playing = 2;break;
+							}
+							
+							rec1.playon = false;
+							Log.d("Motion Up", ""+rec1.playon);
+						}
 					}
-					rec1.play();
+				});
+				play1.start();
 				}
-				if(action == MotionEvent.ACTION_UP) {
-					switch(playing){
-					case 1:playing = 0;break;
-					case 3:playing = 2;break;
-					}
-					rec1.playon = true;
-				}
+				
 				return false;
 			}
 		});
@@ -234,21 +248,30 @@ public class Deck extends Activity {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				// TODO Auto-generated method stub
-				int action = event.getAction();
-				if(action == MotionEvent.ACTION_DOWN){
-					switch(playing){
-					case 0:playing = 2;break;
-					case 1:playing = 3;break;
+				final int action = event.getAction();
+				Thread play2 = new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						
+						if(action == MotionEvent.ACTION_DOWN){
+							switch(playing){
+							case 0:playing = 2;break;
+							case 1:playing = 3;break;
+							}
+							rec2.play();
+						}
+						if(action == MotionEvent.ACTION_UP) {
+							switch(playing){
+							case 2:playing = 0;break;
+							case 3:playing = 1;break;
+							}
+							rec2.playon = false;
+						}
 					}
-					rec2.play();
-				}
-				if(action == MotionEvent.ACTION_UP) {
-					switch(playing){
-					case 2:playing = 0;break;
-					case 3:playing = 1;break;
-					}
-					rec2.playon = true;
-				}
+				});
+				play2.start();
 				return false;
 			}
 		});
