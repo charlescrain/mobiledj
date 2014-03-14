@@ -1,5 +1,13 @@
 package com.ece251.mobiledj;
 
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
+
+import android.media.AudioFormat;
+import android.media.AudioManager;
+import android.media.AudioTrack;
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
@@ -14,7 +22,7 @@ import android.widget.ToggleButton;
 public class Deck extends Activity {
 	Record_PlayBack rec1, rec2, rec3, rec4;
 	Button record1, record2, record3, record4; //Record Buttons
-	Button play1,play2,play3,play4;
+	Button play1,play2,play3,play4,Mix;
 	static short[] audioOne = new short[600000];
 	static short[] audioTwo = new short[600000];
 	static short[] audioThree = new short[600000];
@@ -68,6 +76,8 @@ public class Deck extends Activity {
 		play2 = (Button) findViewById(R.id.Play_button2);
 		play3 = (Button) findViewById(R.id.Play_button3);
 		play4 = (Button) findViewById(R.id.Play_button4);
+		
+		Mix = (Button) findViewById(R.id.Mix_button);
 		
 		record1.setOnTouchListener(new OnTouchListener() {
 			
@@ -202,6 +212,58 @@ public class Deck extends Activity {
 		});
 		
 		*/
+		
+		Mix.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				// TODO Auto-generated method stub
+				
+				final int action = event.getAction();
+				if(action != MotionEvent.ACTION_MOVE){
+				Thread play1 = new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						if(action == MotionEvent.ACTION_DOWN){
+							//int shortSizeInBytes = Short.SIZE/Byte.SIZE;
+							//int bufferSizeInBytes = (int)(audioOne.length()/shortSizeInBytes);
+					          //Log.d("tahdaerhtaetaestah", "test"+bufferSizeInBytes);
+					          //short[] audioData = new short[1];
+
+					              //  InputStream inputStream = new FileInputStream(file);
+					               // BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+					               // DataInputStream dataInputStream = new DataInputStream(bufferedInputStream);
+
+					                AudioTrack audioMix = new AudioTrack(
+					                            AudioManager.STREAM_MUSIC,
+					                            11025,
+					                            AudioFormat.CHANNEL_CONFIGURATION_MONO,
+					                            AudioFormat.ENCODING_PCM_16BIT,
+					                            Time,
+					                            AudioTrack.MODE_STREAM);
+							audioMix.play();
+					        audioMix.write(audioOne, 0, Time);
+							
+						}
+						if(action == MotionEvent.ACTION_UP) {
+							switch(playing){
+							case 1:playing = 0;break;
+							case 3:playing = 2;break;
+							}
+							
+							rec1.playon = false;
+							Log.d("Motion Up", ""+rec1.playon);
+						}
+					}
+				});
+				play1.start();
+				}
+				
+				return false;
+			}
+		});
 		
 		play1.setOnTouchListener(new OnTouchListener() {
 			

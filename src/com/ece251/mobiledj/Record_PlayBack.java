@@ -79,10 +79,10 @@ public class Record_PlayBack {
 	public void play(){
 		  file = new File(Environment.getExternalStorageDirectory(), filename);  //make a new file
 		  playon = true;
-          int shortSizeInBytes = Short.SIZE/Byte.SIZE;
+          //int shortSizeInBytes = Short.SIZE/Byte.SIZE;
 
-          int bufferSizeInBytes = (int)(file.length()/shortSizeInBytes);
-          Log.d("tahdaerhtaetaestah", "test"+bufferSizeInBytes);
+          //int bufferSizeInBytes = (int)(file.length()/shortSizeInBytes);
+          //Log.d("tahdaerhtaetaestah", "test"+bufferSizeInBytes);
           short[] audioData = new short[1];
 
           try {
@@ -95,7 +95,7 @@ public class Record_PlayBack {
                             11025,
                             AudioFormat.CHANNEL_CONFIGURATION_MONO,
                             AudioFormat.ENCODING_PCM_16BIT,
-                            bufferSizeInBytes,
+                            16,
                             AudioTrack.MODE_STREAM);
              //   audioTrack.setNotificationMarkerPosition(bufferSizeInBytes);
              /*   audioTrack.setPlaybackPositionUpdateListener(new OnPlaybackPositionUpdateListener() {
