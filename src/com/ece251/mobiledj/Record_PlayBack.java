@@ -45,13 +45,13 @@ public class Record_PlayBack {
               BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
               DataOutputStream dataOutputStream = new DataOutputStream(bufferedOutputStream);
 
-              int minBufferSize = AudioRecord.getMinBufferSize(11025,
+              int minBufferSize = AudioRecord.getMinBufferSize(44100,
                           AudioFormat.CHANNEL_CONFIGURATION_MONO,
                           AudioFormat.ENCODING_PCM_16BIT);
               short[] audioData = new short[minBufferSize];
 
               AudioRecord audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
-                          11025,
+            		  	44100,
                           AudioFormat.CHANNEL_CONFIGURATION_MONO,
                           AudioFormat.ENCODING_PCM_16BIT,
                           minBufferSize);
@@ -92,7 +92,7 @@ public class Record_PlayBack {
 
                 AudioTrack audioTrack = new AudioTrack(
                             AudioManager.STREAM_MUSIC,
-                            11025,
+                            44100,
                             AudioFormat.CHANNEL_CONFIGURATION_MONO,
                             AudioFormat.ENCODING_PCM_16BIT,
                             16,
@@ -115,6 +115,7 @@ public class Record_PlayBack {
                 while((dataInputStream.available() > 0) && playon)
                 {
                       audioData[0] = dataInputStream.readShort();
+                      //Log.d("SIGNAL",""+audioData[0]);
                       if(filename == "recording1.pcm"){
                     	  Deck.audioOne[Deck.Time] = audioData[0];
                       }

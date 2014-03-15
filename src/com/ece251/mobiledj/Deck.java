@@ -23,13 +23,15 @@ public class Deck extends Activity {
 	Record_PlayBack rec1, rec2, rec3, rec4;
 	Button record1, record2, record3, record4; //Record Buttons
 	Button play1,play2,play3,play4,Mix,Save;
-	static short[] audioOne = new short[600000];
-	static short[] audioTwo = new short[600000];
-	static short[] audioThree = new short[600000];
-	static short[] audioFour = new short[600000];
-	static short[] audioMix = new short[600000];
+	static short[] audioOne = new short[2400000];
+	static short[] audioTwo = new short[2400000];
+	static short[] audioThree = new short[2400000];
+	static short[] audioFour = new short[2400000];
+	static short[] audioMix = new short[2400000];
 	static volatile int Time = 0;
 	static int playing = 0;
+	short[] audioData = new short[1];
+	short temp;
 	
 	static  boolean playon1,playon2;
 	
@@ -229,8 +231,8 @@ public class Deck extends Activity {
 					public void run() {
 						// TODO Auto-generated method stub
 						if(action == MotionEvent.ACTION_DOWN){
-							int shortSizeInBytes = Short.SIZE/Byte.SIZE;
-							int bufferSizeInBytes = (int)(audioMix.length/shortSizeInBytes);
+							//int shortSizeInBytes = Short.SIZE/Byte.SIZE;
+							//int bufferSizeInBytes = (int)(audioMix.length/shortSizeInBytes);
 					          //Log.d("tahdaerhtaetaestah", "test"+bufferSizeInBytes);
 					          //short[] audioData = new short[1];
 
@@ -240,13 +242,18 @@ public class Deck extends Activity {
 
 					                AudioTrack audioMixed = new AudioTrack(
 					                            AudioManager.STREAM_MUSIC,
-					                            11025,
+					                            44100,
 					                            AudioFormat.CHANNEL_CONFIGURATION_MONO,
 					                            AudioFormat.ENCODING_PCM_16BIT,
-					                            bufferSizeInBytes,
+					                            16,
 					                            AudioTrack.MODE_STREAM);
-							audioMixed.play();
-					        audioMixed.write(audioMix, 0, bufferSizeInBytes);
+					                audioMixed.setStereoVolume(AudioTrack.getMaxVolume(), AudioTrack.getMaxVolume());
+					                audioMixed.play();
+					                int i;
+					                for(i = 0; i<Time; i++){
+					                	audioData[0] = audioMix[i];
+						                audioMixed.write(audioData, 0, 1);
+					                }
 							
 						}
 						if(action == MotionEvent.ACTION_UP) {
@@ -277,20 +284,26 @@ public class Deck extends Activity {
 						if(action == MotionEvent.ACTION_DOWN){
 							int i;
 							for(i = 0; i<Time; i++){
-								//audioMix[i] = (short)((audioOne[i]/2) + (audioTwo[i]/2));
+//								float one = audioOne[i];
+//								float two = audioTwo[i];
+//								temp = (short)((one+two)/2);
+//								audioMix[i] = temp;
 								float samplef1 = audioOne[i] / 32768.0f; 
 						        float samplef2 = audioTwo[i] / 32768.0f;
 						        float mixed    = samplef1 + samplef2;
 
 						        // reduce the volume a bit:
-						        //mixed *= 0.8;
+						        mixed *= 0.8;
 						        // hard clipping
 						        if (mixed > 1.0f)  mixed = 1.0f;
 						        if (mixed < -1.0f) mixed = -1.0f;
 
 						        short outputSample = (short) (mixed * 32768.0f);
-						        audioMix[i]         = outputSample;   
-						        Log.d("test",""+audioMix[i]);
+						        audioMix[i]         = outputSample;
+								//Log.d("One",""+audioOne[i]);
+								//Log.d("Two",""+audioTwo[i]);
+						        Log.d("Mix1",""+outputSample);
+						        //Log.d("Mix2",""+audioMix[i]);
 							}
 							Log.d("done","DONE");
 						}
@@ -306,7 +319,7 @@ public class Deck extends Activity {
 			}
 		});
 		
-		play1.setOnTouchListener(new OnTouchListener() {
+play1.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -325,6 +338,9 @@ public class Deck extends Activity {
 							switch(playing){
 							case 0:playing = 1;break;
 							case 2:playing = 5;break;
+							case 3:playing = 6;break;
+							case 4:playing = 7;break;
+							
 							}
 							rec1.play();
 						}
@@ -332,6 +348,8 @@ public class Deck extends Activity {
 							switch(playing){
 							case 1:playing = 0;break;
 							case 5:playing = 2;break;
+							case 6:playing = 3;break;
+							case 7:playing = 4;break;
 							}
 							
 							rec1.playon = false;
@@ -362,6 +380,8 @@ public class Deck extends Activity {
 							switch(playing){
 							case 0:playing = 2;break;
 							case 1:playing = 5;break;
+							case 3:playing = 8;break;
+							case 4:playing = 9;break;
 							}
 							rec2.play();
 						}
@@ -369,6 +389,8 @@ public class Deck extends Activity {
 							switch(playing){
 							case 2:playing = 0;break;
 							case 5:playing = 1;break;
+							case 8:playing = 3;break;
+							case 9:playing = 4;break;
 							}
 							rec2.playon = false;
 						}
@@ -378,45 +400,86 @@ public class Deck extends Activity {
 				return false;
 			}
 		});
-			
-		play3.setOnClickListener(new OnClickListener() {
+		
+		play3.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
-			public void onClick(View v) {
+			public boolean onTouch(View v, MotionEvent event) {
 				// TODO Auto-generated method stub
-//				switch(playing){
-//				case 1:playing = ;break;
-//				case 2:playing = ;break;
-//				case 3:playing = ;break;
-//				case 4:playing = ;break;
-//				case 5:playing = ;break;
-//				case 6:playing = ;break;
-//				case 7:playing = ;break;
-//				case 8:playing = ;break;
-//				case 9:playing = ;break;
-//				case 10:playing = ;break;
-//				}
-				rec3.play();
+				
+				final int action = event.getAction();
+				Log.d("ACtion", "Action is:" + action);
+				if(action != MotionEvent.ACTION_MOVE){
+				Thread playThread3 = new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+							Log.d("PLay", "Calling PLay");
+						if(action == MotionEvent.ACTION_DOWN){
+							switch(playing){
+							case 0:playing = 3;break;
+							case 1:playing = 6;break;
+							case 2:playing = 8;break;
+							case 4:playing = 10;break;
+							
+							}
+							rec3.play();
+						}
+						if(action == MotionEvent.ACTION_UP) {
+							switch(playing){
+							case 3:playing = 0;break;
+							case 6:playing = 1;break;
+							case 8:playing = 2;break;
+							case 10:playing = 4;break;
+							}
+							
+							rec3.playon = false;
+							Log.d("Motion Up", ""+rec1.playon);
+						}
+					}
+				});
+				playThread3.start();
+				}
+				
+				return false;
 			}
 		});
-		play4.setOnClickListener(new OnClickListener() {
+	
+		play4.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
-			public void onClick(View v) {
+			public boolean onTouch(View v, MotionEvent event) {
 				// TODO Auto-generated method stub
-//				switch(playing){
-//				case 1:playing = ;break;
-//				case 2:playing = ;break;
-//				case 3:playing = ;break;
-//				case 4:playing = ;break;
-//				case 5:playing = ;break;
-//				case 6:playing = ;break;
-//				case 7:playing = ;break;
-//				case 8:playing = ;break;
-//				case 9:playing = ;break;
-//				case 10:playing = ;break;
-//				}
-				rec4.play();
+				final int action = event.getAction();
+				Thread playThread4 = new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						
+						if(action == MotionEvent.ACTION_DOWN){
+							switch(playing){
+							case 0:playing = 4;break;
+							case 1:playing = 7;break;
+							case 2:playing = 9;break;
+							case 3:playing = 10;break;
+							}
+							rec4.play();
+						}
+						if(action == MotionEvent.ACTION_UP) {
+							switch(playing){
+							case 4:playing = 0;break;
+							case 7:playing = 1;break;
+							case 9:playing = 2;break;
+							case 10:playing = 3;break;
+							}
+							rec4.playon = false;
+						}
+					}
+				});
+				playThread4.start();
+				return false;
 			}
 		});
 	}
