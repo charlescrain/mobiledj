@@ -178,6 +178,25 @@ public class Record_PlayBack {
                     	  Deck.audioOne[Deck.Time] = 0;
                     	  Deck.Time++;
                       }break;
+                      case 11:if(filename == "recording1.pcm"){
+                    	  Deck.audioFour[Deck.Time] = 0;
+                    	  Deck.Time++;
+                      }break;
+                      case 12:if(filename == "recording1.pcm"){
+                    	  Deck.audioThree[Deck.Time] = 0;
+                    	  Deck.Time++;
+                      }break;
+                      case 13:if(filename == "recording1.pcm"){
+                    	  Deck.audioTwo[Deck.Time] = 0;
+                    	  Deck.Time++;
+                      }break;
+                      case 14:if(filename == "recording2.pcm"){
+                    	  Deck.audioOne[Deck.Time] = 0;
+                    	  Deck.Time++;
+                      }break;
+                      case 15:if(filename == "recording1.pcm"){
+                    	  Deck.Time++;
+                      }break;
                       }
                       audioTrack.write(audioData, 0, 1);
                 }
