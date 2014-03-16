@@ -1,14 +1,21 @@
 package com.ece251.mobiledj;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.os.Bundle;
+import android.os.Environment;
 import android.app.Activity;
 import android.util.Log;
 import android.view.Menu;
@@ -17,23 +24,26 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
 public class Deck extends Activity {
-	Record_PlayBack rec1, rec2, rec3, rec4;
+	Record_PlayBack rec1, rec2, rec3, rec4, recm;
 	Button record1, record2, record3, record4; //Record Buttons
-	Button play1,play2,play3,play4,Mix,Save;
+	Button play1,play2,play3,play4,Save,Playback;
+	ToggleButton loop1,loop2,loop3,loop4,Mix;
 	static short[] audioOne = new short[2400000];
 	static short[] audioTwo = new short[2400000];
 	static short[] audioThree = new short[2400000];
 	static short[] audioFour = new short[2400000];
 	static short[] audioMix = new short[2400000];
 	static volatile int Time = 0;
+	int PlaybackTime = 0;
 	static int playing = 0;
 	short[] audioData = new short[1];
 	short temp;
 	
-	static  boolean playon1,playon2;
+	static volatile boolean looping1,looping2,looping3,looping4,up1,up2,up3,up4,mixed,mixing;
 	
 
 	@Override
@@ -66,6 +76,7 @@ public class Deck extends Activity {
 		rec2 = new Record_PlayBack("recording2.pcm");
 		rec3 = new Record_PlayBack("recording3.pcm");
 		rec4 = new Record_PlayBack("recording4.pcm");
+		recm = new Record_PlayBack("Empty.pcm");
 		
 	}
 	
@@ -80,8 +91,34 @@ public class Deck extends Activity {
 		play3 = (Button) findViewById(R.id.Play_button3);
 		play4 = (Button) findViewById(R.id.Play_button4);
 		
-		Mix = (Button) findViewById(R.id.Mix_button);
+		loop1 = (ToggleButton) findViewById(R.id.Loops_onoff1);
+		loop2 = (ToggleButton) findViewById(R.id.Loops_onoff2);
+		loop3 = (ToggleButton) findViewById(R.id.Loops_onoff3);
+		loop4 = (ToggleButton) findViewById(R.id.Loops_onoff4);
+		
+		Mix = (ToggleButton) findViewById(R.id.Mix_button);
 		Save = (Button) findViewById(R.id.Save_button);
+		Playback = (Button) findViewById(R.id.Playback_button);
+		looping1 = false;
+		looping2 = false;
+		looping3 = false;
+		looping4 = false;
+		mixed = false;
+		mixing = false;
+//		File Emptyfile = new File(Environment.getExternalStorageDirectory(), "Empty.pcm");  //make a new file
+//		try {
+//			Emptyfile.createNewFile();
+//			OutputStream outputStream = new FileOutputStream(Emptyfile);
+//            BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
+//            DataOutputStream dataOutputStream = new DataOutputStream(bufferedOutputStream);
+//            dataOutputStream.writeShort(1);
+//            outputStream.close();
+//            bufferedOutputStream.close();
+//            dataOutputStream.close();
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
 		
 		record1.setOnTouchListener(new OnTouchListener() {
 			
@@ -217,7 +254,7 @@ public class Deck extends Activity {
 		
 		*/
 		
-		Mix.setOnTouchListener(new OnTouchListener() {
+		Playback.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -225,7 +262,7 @@ public class Deck extends Activity {
 				
 				final int action = event.getAction();
 				if(action != MotionEvent.ACTION_MOVE){
-				Thread play1 = new Thread(new Runnable() {
+				Thread PlaybackThread = new Thread(new Runnable() {
 					
 					@Override
 					public void run() {
@@ -250,7 +287,7 @@ public class Deck extends Activity {
 					                audioMixed.setStereoVolume(AudioTrack.getMaxVolume(), AudioTrack.getMaxVolume());
 					                audioMixed.play();
 					                int i;
-					                for(i = 0; i<Time; i++){
+					                for(i = 0; i<PlaybackTime; i++){
 					                	audioData[0] = audioMix[i];
 						                audioMixed.write(audioData, 0, 1);
 					                }
@@ -261,7 +298,7 @@ public class Deck extends Activity {
 						}
 					}
 				});
-				play1.start();
+				PlaybackThread.start();
 				}
 				
 				return false;
@@ -276,88 +313,127 @@ public class Deck extends Activity {
 				
 				final int action = event.getAction();
 				if(action != MotionEvent.ACTION_MOVE){
-				Thread play1 = new Thread(new Runnable() {
+				Thread SaveThread = new Thread(new Runnable() {
 					
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
 						if(action == MotionEvent.ACTION_DOWN){
+							if(mixed == true){
 							int i;
+							Log.d("done",""+Time);
+							try
+					        {
+							File Finalfile = new File(Environment.getExternalStorageDirectory(), "recording1.pcm");  //make a new file
+							Finalfile.createNewFile();  //do a try to make sure making new file works
+				              
+				              //Set newly made file to a DataOutputStream
+				              OutputStream outputStreamFinal = new FileOutputStream(Finalfile);
+				              BufferedOutputStream bufferedOutputStreamFinal = new BufferedOutputStream(outputStreamFinal);
+				              DataOutputStream dataOutputStreamFinal = new DataOutputStream(bufferedOutputStreamFinal);
 							for(i = 0; i<Time; i++){
-//								float one = audioOne[i];
-//								float two = audioTwo[i];
-//								temp = (short)((one+two)/2);
-//								audioMix[i] = temp;
-								float samplef1 = audioOne[i] / 32768.0f; 
-						        float samplef2 = audioTwo[i] / 32768.0f;
-						        float mixed    = samplef1 + samplef2;
-
-						        // reduce the volume a bit:
-						        mixed *= 0.8;
-						        // hard clipping
-						        if (mixed > 1.0f)  mixed = 1.0f;
-						        if (mixed < -1.0f) mixed = -1.0f;
-
-						        short outputSample = (short) (mixed * 32768.0f);
-						        audioMix[i]         = outputSample;
+								float one = audioOne[i];
+								float two = audioTwo[i];
+								float three = audioThree[i];
+								float four = audioFour[i];
+								temp = (short)((one+two+three+four)/4);
+								audioMix[i] = temp;
+//								float samplef1 = audioOne[i] / 32768.0f; 
+//						        float samplef2 = audioTwo[i] / 32768.0f;
+//						        float samplef3 = audioThree[i] / 32768.0f; 
+//						        float samplef4 = audioFour[i] / 32768.0f;
+//						        float mixed    = samplef1 + samplef2 + samplef3 + samplef4;
+//
+//						        // reduce the volume a bit:
+//						        mixed *= 0.8;
+//						        // hard clipping
+//						        if (mixed > 1.0f)  mixed = 1.0f;
+//						        if (mixed < -1.0f) mixed = -1.0f;
+//
+//						        short outputSample = (short) (mixed * 32768.0f);
+//						        audioMix[i]         = outputSample;
 								//Log.d("One",""+audioOne[i]);
 								//Log.d("Two",""+audioTwo[i]);
-						        Log.d("Mix1",""+outputSample);
+						        //Log.d("Mix1",""+outputSample);
 						        //Log.d("Mix2",""+audioMix[i]);
+								dataOutputStreamFinal.writeShort(audioMix[i]);
 							}
+				              outputStreamFinal.close();
+				              bufferedOutputStreamFinal.close();
+				              dataOutputStreamFinal.close();
+					        }catch (IOException e)
+				              {
+				                    e.printStackTrace();
+				              }
+							PlaybackTime = Time;
+							Time = 0;
 							Log.d("done","DONE");
+							}
 						}
 						if(action == MotionEvent.ACTION_UP) {
 							
 						}
+						return;
 					}
 				});
-				play1.start();
+				SaveThread.start();
 				}
 				
 				return false;
 			}
 		});
 		
-play1.setOnTouchListener(new OnTouchListener() {
+		play1.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				// TODO Auto-generated method stub
 				
 				final int action = event.getAction();
-				Log.d("ACtion", "Action is:" + action);
 				if(action != MotionEvent.ACTION_MOVE){
-				Thread play1 = new Thread(new Runnable() {
+				Thread playThread1 = new Thread(new Runnable() {
 					
 					@Override
 					public void run() {
 						// TODO Auto-generated method stub
-							Log.d("PLay", "Calling PLay");
 						if(action == MotionEvent.ACTION_DOWN){
 							switch(playing){
 							case 0:playing = 1;break;
 							case 2:playing = 5;break;
 							case 3:playing = 6;break;
 							case 4:playing = 7;break;
+							case 8:playing = 11;break;
+							case 9:playing = 12;break;
+							case 10:playing = 13;break;
+							case 14:playing = 15;break;
 							
 							}
+							up1 = false;
 							rec1.play();
+							
 						}
 						if(action == MotionEvent.ACTION_UP) {
+							if(!looping1){
 							switch(playing){
 							case 1:playing = 0;break;
 							case 5:playing = 2;break;
 							case 6:playing = 3;break;
 							case 7:playing = 4;break;
+							case 11:playing = 8;break;
+							case 12:playing = 9;break;
+							case 13:playing = 10;break;
+							case 15:playing = 14;break;
 							}
 							
 							rec1.playon = false;
-							Log.d("Motion Up", ""+rec1.playon);
+							}else{
+								up1 = true;
+							}
 						}
+						return;
 					}
 				});
-				play1.start();
+				playThread1.start();
 				}
 				
 				return false;
@@ -370,7 +446,7 @@ play1.setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
 				// TODO Auto-generated method stub
 				final int action = event.getAction();
-				Thread play2 = new Thread(new Runnable() {
+				Thread playThread2 = new Thread(new Runnable() {
 					
 					@Override
 					public void run() {
@@ -382,21 +458,35 @@ play1.setOnTouchListener(new OnTouchListener() {
 							case 1:playing = 5;break;
 							case 3:playing = 8;break;
 							case 4:playing = 9;break;
+							case 6:playing = 11;break;
+							case 7:playing = 12;break;
+							case 10:playing = 14;break;
+							case 13:playing = 15;break;
 							}
+							up2 = false;
 							rec2.play();
 						}
 						if(action == MotionEvent.ACTION_UP) {
+							if(!looping2){
 							switch(playing){
 							case 2:playing = 0;break;
 							case 5:playing = 1;break;
 							case 8:playing = 3;break;
 							case 9:playing = 4;break;
+							case 11:playing = 6;break;
+							case 12:playing = 7;break;
+							case 14:playing = 10;break;
+							case 15:playing = 13;break;
 							}
 							rec2.playon = false;
+							}else{
+								up2 = true;
+							}
 						}
+						return;
 					}
 				});
-				play2.start();
+				playThread2.start();
 				return false;
 			}
 		});
@@ -408,7 +498,6 @@ play1.setOnTouchListener(new OnTouchListener() {
 				// TODO Auto-generated method stub
 				
 				final int action = event.getAction();
-				Log.d("ACtion", "Action is:" + action);
 				if(action != MotionEvent.ACTION_MOVE){
 				Thread playThread3 = new Thread(new Runnable() {
 					
@@ -422,21 +511,33 @@ play1.setOnTouchListener(new OnTouchListener() {
 							case 1:playing = 6;break;
 							case 2:playing = 8;break;
 							case 4:playing = 10;break;
-							
+							case 5:playing = 11;break;
+							case 7:playing = 13;break;
+							case 9:playing = 14;break;
+							case 12:playing = 15;break;
 							}
+							up3 = false;
 							rec3.play();
 						}
 						if(action == MotionEvent.ACTION_UP) {
+							if(!looping3){
 							switch(playing){
 							case 3:playing = 0;break;
 							case 6:playing = 1;break;
 							case 8:playing = 2;break;
 							case 10:playing = 4;break;
+							case 11:playing = 5;break;
+							case 13:playing = 7;break;
+							case 14:playing = 9;break;
+							case 15:playing = 12;break;
 							}
 							
 							rec3.playon = false;
-							Log.d("Motion Up", ""+rec1.playon);
+							}else{
+								up3 = true;
+							}
 						}
+						return;
 					}
 				});
 				playThread3.start();
@@ -464,23 +565,142 @@ play1.setOnTouchListener(new OnTouchListener() {
 							case 1:playing = 7;break;
 							case 2:playing = 9;break;
 							case 3:playing = 10;break;
+							case 5:playing = 12;break;
+							case 6:playing = 13;break;
+							case 8:playing = 14;break;
+							case 11:playing = 15;break;
 							}
+							up4 = false;
 							rec4.play();
 						}
 						if(action == MotionEvent.ACTION_UP) {
+							if(!looping4){
 							switch(playing){
 							case 4:playing = 0;break;
 							case 7:playing = 1;break;
 							case 9:playing = 2;break;
 							case 10:playing = 3;break;
+							case 12:playing = 5;break;
+							case 13:playing = 6;break;
+							case 14:playing = 8;break;
+							case 15:playing = 11;break;
 							}
 							rec4.playon = false;
+							}else{
+								up4 = true;
+							}
 						}
+						return;
 					}
 				});
 				playThread4.start();
 				return false;
 			}
 		});
+		
+		loop1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		        if (isChecked) {
+		        	looping1 = true;// The toggle is enabled
+		        } else {
+		        	looping1 = false;// The toggle is disabled
+		        	if(up1 == true){
+						switch(playing){
+						case 1:playing = 0;break;
+						case 5:playing = 2;break;
+						case 6:playing = 3;break;
+						case 7:playing = 4;break;
+						}
+						
+						rec1.playon = false;
+					}
+		        }
+		    }
+		});
+		loop2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		        if (isChecked) {
+		        	looping2 = true;// The toggle is enabled
+		        } else {
+		        	looping2 = false;// The toggle is disabled
+		        	if(up2 == true){
+						switch(playing){
+						case 1:playing = 0;break;
+						case 5:playing = 2;break;
+						case 6:playing = 3;break;
+						case 7:playing = 4;break;
+						}
+						
+						rec2.playon = false;
+					}
+		        }
+		    }
+		});
+		loop3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		        if (isChecked) {
+		        	looping3 = true;// The toggle is enabled
+		        } else {
+		        	looping3 = false;// The toggle is disabled
+		        	if(up3 == true){
+						switch(playing){
+						case 1:playing = 0;break;
+						case 5:playing = 2;break;
+						case 6:playing = 3;break;
+						case 7:playing = 4;break;
+						}
+						
+						rec3.playon = false;
+					}
+		        }
+		    }
+		});
+		loop4.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		        if (isChecked) {
+		        	looping4 = true;// The toggle is enabled
+		        } else {
+		        	looping4 = false;// The toggle is disabled
+		        	if(up4 == true){
+						switch(playing){
+						case 1:playing = 0;break;
+						case 5:playing = 2;break;
+						case 6:playing = 3;break;
+						case 7:playing = 4;break;
+						}
+						
+						rec4.playon = false;
+					}
+		        }
+		    }
+		});
+		Mix.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				// TODO Auto-generated method stub
+				
+				final boolean Checked = isChecked;
+				Thread MixThread = new Thread(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						 if (Checked) {
+							 mixed = false;
+							 mixing = true;
+							 recm.play();
+					        } else {
+					         rec1.playon = false;
+					         mixing = false;
+					         mixed = true;
+					        }
+							return;
+					}	
+				});
+				MixThread.start();
+			}
+		});
+
 	}
 }

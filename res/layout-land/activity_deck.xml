@@ -29,11 +29,13 @@
             android:layout_height="match_parent"
             android:orientation="vertical" >
 
-            <Button
+            <ToggleButton
                 android:id="@+id/Mix_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Mix" />
+                android:text="Mix"
+                android:textOff="Mix"
+                android:textOn="Mix" />
 
             <Button
                 android:id="@+id/Save_button"

@@ -67,6 +67,8 @@ public class Record_PlayBack {
                     }
               }
               audioRecord.stop();
+              outputStream.close();
+              bufferedOutputStream.close();
               dataOutputStream.close();
 
         }
@@ -77,7 +79,11 @@ public class Record_PlayBack {
 	}
 	
 	public void play(){
+		if(filename != "Empty.pcm"){
 		  file = new File(Environment.getExternalStorageDirectory(), filename);  //make a new file
+		}else{
+		  file = new File(Environment.getExternalStorageDirectory(), "recording1.pcm");  //make a new file
+		}
 		  playon = true;
           //int shortSizeInBytes = Short.SIZE/Byte.SIZE;
 
@@ -89,7 +95,6 @@ public class Record_PlayBack {
                 InputStream inputStream = new FileInputStream(file);
                 BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
                 DataInputStream dataInputStream = new DataInputStream(bufferedInputStream);
-
                 AudioTrack audioTrack = new AudioTrack(
                             AudioManager.STREAM_MUSIC,
                             44100,
@@ -112,9 +117,13 @@ public class Record_PlayBack {
                 audioTrack.setStereoVolume(AudioTrack.getMaxVolume(), AudioTrack.getMaxVolume());
                // audioTrack.setLoopPoints(0, bufferSizeInBytes, 3);
                 audioTrack.play();
-                while((dataInputStream.available() > 0) && playon)
+                while(playon)
                 {
-                      audioData[0] = dataInputStream.readShort();
+                	
+                     audioData[0] = dataInputStream.readShort();
+                	
+                	
+                	if(Deck.mixing == true){
                       //Log.d("SIGNAL",""+audioData[0]);
                       if(filename == "recording1.pcm"){
                     	  Deck.audioOne[Deck.Time] = audioData[0];
@@ -122,8 +131,22 @@ public class Record_PlayBack {
                       if(filename == "recording2.pcm"){
                     	  Deck.audioTwo[Deck.Time] = audioData[0];
                       }
+                      if(filename == "recording3.pcm"){
+                    	  Deck.audioThree[Deck.Time] = audioData[0];
+                      }
+                      if(filename == "recording4.pcm"){
+                    	  Deck.audioFour[Deck.Time] = audioData[0];
+                      }
+                	
                       
                       switch(Deck.playing){
+                      case 0:if(filename == "Empty.pcm"){
+                    	  Deck.audioOne[Deck.Time] = 0;
+                    	  Deck.audioTwo[Deck.Time] = 0;
+                    	  Deck.audioThree[Deck.Time] = 0;
+                    	  Deck.audioFour[Deck.Time] = 0;
+                    	  Deck.Time++;
+                      }break;
                       case 1:if(filename == "recording1.pcm"){
                     	  Deck.audioTwo[Deck.Time] = 0;
                     	  Deck.audioThree[Deck.Time] = 0;
@@ -198,8 +221,26 @@ public class Record_PlayBack {
                     	  Deck.Time++;
                       }break;
                       }
+                	}
+                	
+                	if(filename != "Empty.pcm"){
                       audioTrack.write(audioData, 0, 1);
+                	}else{
+                	  audioData[0] = 0;
+                	  audioTrack.write(audioData, 0, 1);
+                	}
+                      if(dataInputStream.available() == 0){
+                    	  inputStream.close();
+                    	  bufferedInputStream.close();
+                    	  dataInputStream.close();
+                    	  inputStream = new FileInputStream(file);
+                          bufferedInputStream = new BufferedInputStream(inputStream);
+                          dataInputStream = new DataInputStream(bufferedInputStream);
+                      }
                 }
+                audioTrack.stop();
+                inputStream.close();
+                bufferedInputStream.close();
                 dataInputStream.close();
                 
                 
@@ -211,7 +252,39 @@ public class Record_PlayBack {
           {
                 e.printStackTrace();
           }
-    } 
+//    }else{
+//    	playon = true;
+//    	short[] audioData = new short[1];
+//    	AudioTrack audioTrack = new AudioTrack(
+//                          AudioManager.STREAM_MUSIC,
+//                          44100,
+//                          AudioFormat.CHANNEL_CONFIGURATION_MONO,
+//                          AudioFormat.ENCODING_PCM_16BIT,
+//                          16,
+//                          AudioTrack.MODE_STREAM);
+//           
+//              audioTrack.setStereoVolume(AudioTrack.getMaxVolume(), AudioTrack.getMaxVolume());
+//              audioTrack.play();
+//              while(playon)
+//              {
+//                   audioData[0] = 0;
+//              	
+//              	if(Deck.mixing == true){
+//                   
+//                    if(Deck.playing == 0){
+//                  	  Deck.audioOne[Deck.Time] = 0;
+//                  	  Deck.audioTwo[Deck.Time] = 0;
+//                  	  Deck.audioThree[Deck.Time] = 0;
+//                  	  Deck.audioFour[Deck.Time] = 0;
+//                  	  Deck.Time++;
+//                    }
+//                    audioTrack.write(audioData, 0, 1);
+//                    
+//              }
+//    	
+//    }
+//    }
+	}
 	
 	
 
