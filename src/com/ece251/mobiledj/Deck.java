@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
@@ -31,6 +32,7 @@ public class Deck extends Activity {
 	Button record1, record2, record3, record4; //Record Buttons
 	Button play1,play2,play3,play4,Save,Playback,Send,Connect;
 	Button effectSet;
+	CheckBox saved;
 	ToggleButton loop1,loop2,loop3,loop4,Mix;
 	static short[] audioOne = new short[2400000];
 	static short[] audioTwo = new short[2400000];
@@ -95,6 +97,10 @@ public class Deck extends Activity {
 		loop2 = (ToggleButton) findViewById(R.id.Loops_onoff2);
 		loop3 = (ToggleButton) findViewById(R.id.Loops_onoff3);
 		loop4 = (ToggleButton) findViewById(R.id.Loops_onoff4);
+		
+		saved = (CheckBox) findViewById(R.id.checkBox1);
+		saved.setEnabled(false);
+		saved.setChecked(false);
 		
 		Mix = (ToggleButton) findViewById(R.id.Mix_button);
 		Save = (Button) findViewById(R.id.Save_button);
@@ -379,7 +385,7 @@ String filename = "what Omri named the final mix file";
 							Log.d("done",""+Time);
 							try
 					        {
-							File Finalfile = new File(Environment.getExternalStorageDirectory(), "recording1.pcm");  //make a new file
+							File Finalfile = new File(Environment.getExternalStorageDirectory(), "Final.pcm");  //make a new file
 							Finalfile.createNewFile();  //do a try to make sure making new file works
 				              
 				              //Set newly made file to a DataOutputStream
@@ -415,8 +421,6 @@ String filename = "what Omri named the final mix file";
 						        //Log.d("Mix2",""+audioMix[i]);
 								dataOutputStreamFinal.writeShort(audioMix[i]);
 							}
-				              outputStreamFinal.close();
-				              bufferedOutputStreamFinal.close();
 				              dataOutputStreamFinal.close();
 					        }catch (IOException e)
 				              {
@@ -424,6 +428,12 @@ String filename = "what Omri named the final mix file";
 				              }
 							PlaybackTime = Time;
 							Time = 0;
+							runOnUiThread(new Runnable() {
+							     @Override
+							     public void run() {
+								saved.setChecked(true);
+							    }
+							});
 							Log.d("done","DONE");
 							}
 						}
@@ -744,6 +754,12 @@ String filename = "what Omri named the final mix file";
 					public void run() {
 						// TODO Auto-generated method stub
 						 if (Checked) {
+							 runOnUiThread(new Runnable() {
+							     @Override
+							     public void run() {
+								saved.setChecked(true);
+							    }
+							});
 							 mixed = false;
 							 mixing = true;
 							 recm.play();

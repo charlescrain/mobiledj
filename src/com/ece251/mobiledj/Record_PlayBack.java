@@ -67,8 +67,6 @@ public class Record_PlayBack {
                     }
               }
               audioRecord.stop();
-              outputStream.close();
-              bufferedOutputStream.close();
               dataOutputStream.close();
 
         }
