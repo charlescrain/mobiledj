@@ -17,6 +17,7 @@ import android.media.AudioTrack;
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -31,6 +32,7 @@ public class Deck extends Activity {
 	Record_PlayBack rec1, rec2, rec3, rec4, recm;
 	Button record1, record2, record3, record4; //Record Buttons
 	Button play1,play2,play3,play4,Save,Playback;
+	Button effectSet;
 	ToggleButton loop1,loop2,loop3,loop4,Mix;
 	static short[] audioOne = new short[2400000];
 	static short[] audioTwo = new short[2400000];
@@ -44,6 +46,7 @@ public class Deck extends Activity {
 	short temp;
 	
 	static volatile boolean looping1,looping2,looping3,looping4,up1,up2,up3,up4,mixed,mixing;
+	static short effect;
 	
 
 	@Override
@@ -99,6 +102,9 @@ public class Deck extends Activity {
 		Mix = (ToggleButton) findViewById(R.id.Mix_button);
 		Save = (Button) findViewById(R.id.Save_button);
 		Playback = (Button) findViewById(R.id.Playback_button);
+		
+		effectSet = (Button) findViewById(R.id.Effects_button);
+		
 		looping1 = false;
 		looping2 = false;
 		looping3 = false;
@@ -223,36 +229,7 @@ public class Deck extends Activity {
 			}
 		});
 	
-	/*	record1.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				rec1.recording = false;
-				// TODO Auto-generated method stub
-			}
-		});
-		record2.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				rec2.recording = false;
-				// TODO Auto-generated method stub
-			}
-		});
-		record3.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				rec3.recording = false;
-				// TODO Auto-generated method stub
-			}
-		});
-		record4.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				rec4.recording = false;
-				// TODO Auto-generated method stub
-			}
-		});
-		
-		*/
+	
 		
 		Playback.setOnTouchListener(new OnTouchListener() {
 			
@@ -702,5 +679,15 @@ public class Deck extends Activity {
 			}
 		});
 
+		effectSet.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(v.getContext(),EffectActivity.class);
+				startActivity(intent);
+				
+			}
+		});
 	}
 }
