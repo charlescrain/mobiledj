@@ -21,24 +21,24 @@
         android:layout_width="fill_parent"
         android:layout_height="80dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/button2"
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="16dp"
         android:text="Faster Play" />
-
-    <Button
-        android:id="@+id/reversePlay"
-        android:layout_width="fill_parent"
-        android:layout_height="80dp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/button1"
-        android:text="Reverse Play" />
 
     <Button
         android:id="@+id/reverbPlay"
         android:layout_width="fill_parent"
         android:layout_height="80dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1"
-        android:layout_marginTop="20dp"
+        android:layout_below="@+id/fastPlay"
         android:text="Reverb" />
+
+    <Button
+        android:id="@+id/reversePlay"
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/reverbPlay"
+        android:text="Reverse Play" />
 
 </RelativeLayout>

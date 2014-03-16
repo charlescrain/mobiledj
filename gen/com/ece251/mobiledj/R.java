@@ -47,11 +47,9 @@ public final class R {
         public static final int Record_button4=0x7f080015;
         public static final int RelativeLayout1=0x7f080017;
         public static final int Save_button=0x7f080003;
-        public static final int action_settings=0x7f08001d;
-        public static final int button1=0x7f08001b;
-        public static final int button2=0x7f080019;
+        public static final int action_settings=0x7f08001b;
         public static final int fastPlay=0x7f080018;
-        public static final int reverbPlay=0x7f08001c;
+        public static final int reverbPlay=0x7f080019;
         public static final int reversePlay=0x7f08001a;
         public static final int textView1=0x7f080001;
     }
