@@ -36,6 +36,7 @@
         
         <activity
             android:name=".WiFiDirectActivity"
+            android:theme="@android:style/Theme.Holo"
             android:label="WiFiDirectActivity" >
         </activity>
         <activity 
