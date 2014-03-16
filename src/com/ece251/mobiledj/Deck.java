@@ -203,7 +203,7 @@ String filename = "what Omri named the final mix file";
                 	serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, 8988);
         	        getActivity().startService(serviceIntent);
                 }
-		
+		*/
 		record1.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
@@ -307,36 +307,7 @@ String filename = "what Omri named the final mix file";
 			}
 		});
 	
-	/*	record1.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				rec1.recording = false;
-				// TODO Auto-generated method stub
-			}
-		});
-		record2.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				rec2.recording = false;
-				// TODO Auto-generated method stub
-			}
-		});
-		record3.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				rec3.recording = false;
-				// TODO Auto-generated method stub
-			}
-		});
-		record4.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				rec4.recording = false;
-				// TODO Auto-generated method stub
-			}
-		});
-		
-		*/
+
 		
 		Playback.setOnTouchListener(new OnTouchListener() {
 			
@@ -421,6 +392,8 @@ String filename = "what Omri named the final mix file";
 								float three = audioThree[i];
 								float four = audioFour[i];
 								temp = (short)((one+two+three+four)/4);
+								if(temp > 32000 ){temp = 32000;}
+								if(temp < -32000){temp = -32000;}
 								audioMix[i] = temp;
 //								float samplef1 = audioOne[i] / 32768.0f; 
 //						        float samplef2 = audioTwo[i] / 32768.0f;
