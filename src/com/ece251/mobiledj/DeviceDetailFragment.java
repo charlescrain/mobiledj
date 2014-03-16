@@ -125,7 +125,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                     @Override
                     public void onClick(View v) {
                     	//SEND THE FINAL MIX FILE
-                        String filename = "FINALMIXED";
+                        String filename = "Final.pcm";
                     	boolean fileExists = false;
                     	URI uri = null;
                     	
@@ -268,7 +268,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                 Log.d(WiFiDirectActivity.TAG, "Server: connection done");
                 
                 //Change the name of this file to 2MixedTogether
-                String filename = "2MixedTogether";
+                String filename = "Received.pcm";
                 final File f = new File(Environment.getExternalStorageDirectory(), filename);
                 
 
