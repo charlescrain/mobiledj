@@ -866,7 +866,7 @@ Connect.setOnClickListener(new Button.OnClickListener() {
     	//reverse of audioThree
     	case 3:
     	for(int j=rec3.i-1;j>=0;j--){
-    		effectFour[j] = tmpThree[i];
+    		effectThree[j] = tmpThree[i];
     		i++;
     	}break;
     	//reverse audioFour
