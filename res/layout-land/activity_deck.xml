@@ -57,12 +57,6 @@
                 android:text="Effects" />
 
             <Button
-                android:id="@+id/Send_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Send Mix" />
-
-            <Button
                 android:id="@+id/WiFi_Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

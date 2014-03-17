@@ -268,7 +268,7 @@ public class DeviceDetailFragment extends Fragment implements ConnectionInfoList
                 Log.d(WiFiDirectActivity.TAG, "Server: connection done");
                 
                 //Change the name of this file to 2MixedTogether
-                String filename = "Received.pcm";
+                String filename = "recording1.pcm";
                 final File f = new File(Environment.getExternalStorageDirectory(), filename);
                 
 

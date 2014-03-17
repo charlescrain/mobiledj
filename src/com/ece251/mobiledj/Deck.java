@@ -66,12 +66,7 @@ public class Deck extends Activity {
 		
 		initialize_record();
 		init_Button();
-		
-		
-		
-		
 	}
-	//TEST
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -80,8 +75,6 @@ public class Deck extends Activity {
 		return true;
 	}
 
-	//TEST TESTEST
-	//test3
 	
 	private void initialize_record(){
 		rec1 = new Record_PlayBack("recording1.pcm");
@@ -122,7 +115,6 @@ public class Deck extends Activity {
 		Mix = (ToggleButton) findViewById(R.id.Mix_button);
 		Save = (Button) findViewById(R.id.Save_button);
 		Playback = (Button) findViewById(R.id.Playback_button);
-		Send = (Button) findViewById(R.id.Send_button);
 		Connect = (Button) findViewById(R.id.WiFi_Button);
 		effectSet = (Button) findViewById(R.id.Effects_button);
 		
@@ -157,76 +149,6 @@ Connect.setOnClickListener(new Button.OnClickListener() {
         }
      });
 
-
-Send.setOnClickListener(new Button.OnClickListener() {  
-    public void onClick(View v)
-    {
-    	String filename = "FINALMIXED";
-    	boolean fileExists = false;
-    	
-    	//GET THE FINAL MIX FILE
-    	File file = new File(Environment.getExternalStorageDirectory(), filename);
-    	fileExists = file.exists();
-    	if(fileExists){
-    		URI uri = file.toURI();	
-    	}
-    	
-    	Intent serviceIntent = new Intent(Deck.this, FileTransferService.class);
-    	serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);
-    	
-    	
-    	/*
-    	 * INFO IS IN DEVICE DETAIL FRAGMENT, will BE HARD TO CALL FROM THE DECK.java FILE
-    	serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS,
-                info.groupOwnerAddress.getHostAddress());
-    	
-    	serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS,
-                info.groupOwnerAddress.getHostAddress());
-    	
-    	serviceIntent.putExtra(FileTransferService.EXTRAS_FILE_PATH, uri.toString());
-    	
-    	serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, 8988);
-        startService(serviceIntent);
-        
-        */
-    }
- });
-
-
-/*
-//ADD A SEND BUTTON TO SEND THE MIXED SAMPLE
-//ONCLICK FOR THE SEND BUTTON
- *TAKES YOU TO THE FILE TRANSFER SERVICE
-String filename = "what Omri named the final mix file";
-                @Override
-                public void onClick(View v) {
-
-                	
-                	File file = new File(Environment.getExternalStorageDirectory(), filename);
-                	
-                	// if file exists boolean 
-                	 * bool = file.exists()
-                	if (bool){
-                		Uri uri = file.toUri();
-                	}
-                	
-                	//Make an intent
-                	Intent serviceIntent - new Intent (getActivity(), FileTransferService.class);
-                	serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);
-                	
-                	serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS,
-        	                info.groupOwnerAddress.getHostAddress());
-                	
-                	serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS,
-        	                info.groupOwnerAddress.getHostAddress());
-
-                	//NOT SURE WHAT EXTRAS FILE PATH IS, may be a key for the value uri.toString()
-                	serviceIntent.putExtra(FileTransferService.EXTRAS_FILE_PATH, uri.toString());
-                	
-                	serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, 8988);
-        	        getActivity().startService(serviceIntent);
-                }
-		*/
 		record1.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
