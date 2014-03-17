@@ -56,19 +56,17 @@
                 android:layout_height="wrap_content"
                 android:text="Effects" />
 
-            <ToggleButton
-                android:id="@+id/Effects_onoff"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Effects ON/OFF"
-                android:textOff="Effects ON/OFF"
-                android:textOn="Effects ON/OFF" />
-
             <Button
                 android:id="@+id/Send_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Send Mix" />
+
+            <Button
+                android:id="@+id/WiFi_Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Connect" />
 
         </LinearLayout>
 
@@ -221,12 +219,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Play" />
-
-            <Button
-                android:id="@+id/WiFi_Button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Connect" />
 
         </LinearLayout>
     </LinearLayout>

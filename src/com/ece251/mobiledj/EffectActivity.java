@@ -17,13 +17,16 @@ public class EffectActivity extends Activity {
 		fastplay = (Button) findViewById(R.id.fastPlay);
 		reverse = (Button) findViewById(R.id.reversePlay);
 		
+		
 		reverb.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Deck.effect = 1;
+				Deck.effect = 2;
+				
 				finish();
+			
 			}
 		});
 		fastplay.setOnClickListener(new OnClickListener() {
@@ -31,7 +34,7 @@ public class EffectActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Deck.effect = 2;
+				Deck.effect = 1;
 				finish();
 			}
 		});

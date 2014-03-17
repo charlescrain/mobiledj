@@ -28,6 +28,7 @@ public class Record_PlayBack {
 	
 	
 	public volatile boolean recording,playon;
+	public int i,effectCount;
 	
 	public Record_PlayBack(String name){
 		filename = name;
@@ -39,6 +40,7 @@ public class Record_PlayBack {
 		try
         {		
               file.createNewFile();  //do a try to make sure making new file works
+              i=0;
               
               //Set newly made file to a DataOutputStream
               OutputStream outputStream = new FileOutputStream(file);
@@ -61,9 +63,22 @@ public class Record_PlayBack {
               while(recording)
               {
                     int numberOfShort = audioRecord.read(audioData, 0, minBufferSize);
-                    for(int i = 0; i < numberOfShort; i++)
-                    {
-                          dataOutputStream.writeShort(audioData[i]);
+                    for(int j = 0; j < numberOfShort; j++)
+                    {		
+                    	if(filename == "recording1.pcm" ){
+                    		Deck.tmpOne[i] = audioData[j];
+                        }
+                    	else if(filename == "recording2.pcm"){
+                    		Deck.tmpTwo[i] = audioData[j];
+                        }
+                    	else if(filename == "recording3.pcm"){
+                    		Deck.tmpThree[i] = audioData[j];
+                        }
+                    	else if(filename == "recording4.pcm"){
+                    		Deck.tmpFour[i] = audioData[j];
+                        }
+                        i++;
+                    	dataOutputStream.writeShort(audioData[j]);
                     }
               }
               audioRecord.stop();
@@ -77,6 +92,7 @@ public class Record_PlayBack {
 	}
 	
 	public void play(){
+		effectCount=0;
 		if(filename != "Empty.pcm"){
 		  file = new File(Environment.getExternalStorageDirectory(), filename);  //make a new file
 		}else{
@@ -118,10 +134,29 @@ public class Record_PlayBack {
                 while(playon)
                 {
                 	
+                	if(filename == "recording1.pcm" && Deck.use_effect1){
+                		
+                		audioData[0] = Deck.effectOne[effectCount];
+                		effectCount++;
+                    }
+                	else if(filename == "recording2.pcm"&& Deck.use_effect2){
+                		audioData[0] = Deck.effectTwo[effectCount];
+                		effectCount++;
+                    }
+                	else if(filename == "recording3.pcm"&& Deck.use_effect3){
+                		audioData[0] = Deck.effectThree[effectCount];
+                		effectCount++;
+                    }
+                	else if(filename == "recording4.pcm"&& Deck.use_effect4){
+                		audioData[0] = Deck.effectFour[effectCount];
+                		effectCount++;
+                    }
+                	else{
                      audioData[0] = dataInputStream.readShort();
+                	}
                 	
                 	
-                	if(Deck.mixing == true){
+                     if(Deck.mixing == true){
                       //Log.d("SIGNAL",""+audioData[0]);
                       if(filename == "recording1.pcm"){
                     	  Deck.audioOne[Deck.Time] = audioData[0];
@@ -234,6 +269,9 @@ public class Record_PlayBack {
                     	  inputStream = new FileInputStream(file);
                           bufferedInputStream = new BufferedInputStream(inputStream);
                           dataInputStream = new DataInputStream(bufferedInputStream);
+                      }
+                      if(effectCount == i){
+                    	  effectCount=0;
                       }
                 }
                 audioTrack.stop();
