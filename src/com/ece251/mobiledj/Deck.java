@@ -800,7 +800,7 @@ Connect.setOnClickListener(new Button.OnClickListener() {
 	}
 	
 	public void effectReverb(int input){
-    	int delayMilliseconds = 500; // half a second
+    	int delayMilliseconds = 250; // half a second
     	int delaySamples = 
     	    (int)((float)delayMilliseconds * 44.1f); // assumes 44100 Hz sample rate
     	float decay = 0.5f;
